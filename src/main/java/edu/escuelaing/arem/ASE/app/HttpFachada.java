@@ -8,14 +8,14 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class HttpServer {
+public class HttpFachada {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(35000);
+            serverSocket = new ServerSocket(36000);
         } catch (IOException e) {
-            System.err.println("Could not listen on port: 35000.");
+            System.err.println("Could not listen on port: 36000.");
             System.exit(1);
         }
 
@@ -43,7 +43,9 @@ public class HttpServer {
             }
             System.out.println("Path: " + path);
             ArrayList<Float> datos = new ArrayList<>();
-            if(path.startsWith("compreflex=")){
+            if(path.startsWith("/calculadora")){
+                outputLine = getDeafult();
+            }else if(path.split("\\?").length > 1 && path.startsWith("/computar")){
                 String[] param = path.split("\\?");
                 try{
                     String comando = param[1].split("=")[1];
@@ -109,7 +111,7 @@ public class HttpServer {
                 "                document.getElementById(\"valor\").innerHTML =\n" +
                 "                this.responseText;\n" +
                 "            }\n" +
-                "            xhttp.open(\"GET\", \"/compreflex=\"+encodeURIComponent(valor));\n" +
+                "            xhttp.open(\"GET\", \"/computar?comando=\"+encodeURIComponent(valor));\n" +
                 "            xhttp.send();\n" +
                 "        }\n" +
                 "    </script>" +
@@ -117,3 +119,4 @@ public class HttpServer {
                 "</html>\n";
     }
 }
+
